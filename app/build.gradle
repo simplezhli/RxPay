@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    
     defaultConfig {
         applicationId "com.weilu.pay"
         minSdkVersion 15
@@ -9,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    
     buildTypes {
         release {
             minifyEnabled false

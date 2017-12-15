@@ -7,7 +7,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.squareup:javapoet:1.9.0'
     implementation 'com.google.auto.service:auto-service:1.0-rc3'
-    compile project(':pay-annotation')
+//    compile project(':pay-annotation')
+    compile 'com.github.simplezhli.RxPay:pay-annotation:v1.0.2'
 }
 
 sourceCompatibility = "1.7"
