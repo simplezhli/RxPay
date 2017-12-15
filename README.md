@@ -16,6 +16,15 @@ RxPay的优点：
 
 ## 使用方式
 
+添加依赖
+
+```
+    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.5'){
+        exclude module: 'appcompat-v7'
+    }
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.5'
+```
+
 ### 支付宝
 
 ```java
