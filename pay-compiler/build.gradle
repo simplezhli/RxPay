@@ -1,0 +1,21 @@
+apply plugin: 'java-library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.weilu.pay.complier'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.squareup:javapoet:1.9.0'
+    implementation 'com.google.auto.service:auto-service:1.0-rc3'
+    compile project(':pay-annotation')
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+//指定编译的编码
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
+
+
