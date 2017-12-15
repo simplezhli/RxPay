@@ -25,6 +25,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     compile project(':pay-api')
-    compile project(':pay-annotation')
     annotationProcessor project(':pay-compiler')
 }
