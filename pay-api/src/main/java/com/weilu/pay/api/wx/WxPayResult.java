@@ -1,4 +1,4 @@
-package com.weilu.pay.api.Wx;
+package com.weilu.pay.api.wx;
 
 /**
  * Created by weilu on 2017/12/14.

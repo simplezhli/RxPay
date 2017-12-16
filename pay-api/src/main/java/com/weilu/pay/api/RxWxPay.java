@@ -11,9 +11,10 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.weilu.pay.api.Wx.WxPayResult;
+import com.weilu.pay.api.exception.PayFailedException;
 import com.weilu.pay.api.utils.BusUtil;
 import com.weilu.pay.api.utils.RxPayUtils;
+import com.weilu.pay.api.wx.WxPayResult;
 
 import java.lang.reflect.Constructor;
 
@@ -130,17 +131,7 @@ public class RxWxPay {
             prepayid = payBean.prepayid;
             sign = payBean.sign;
         }
-        String checkResult = checkisEmpty();
-        if (!isEmpty(checkResult)) {
-            throw new IllegalArgumentException(checkResult + " cannot be null");
-        }
-        if (context == null) {
-            throw new IllegalArgumentException("you have not init the WxPay in your Application!");
-        }
-
-        final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
-        // 将该app注册到微信
-        msgApi.registerApp(payBean.getAppid());
+       
         return
                 Observable
                         .create(new ObservableOnSubscribe<WxPayResult>() {
@@ -149,6 +140,25 @@ public class RxWxPay {
                                 if (emitter.isDisposed()) {
                                     return;
                                 }
+
+                                String checkResult = checkisEmpty();
+                                
+                                if (!isEmpty(checkResult)) {
+                                    emitter.onError(new PayFailedException(checkResult + " cannot be null"));
+                                    emitter.onComplete();
+                                    return;
+                                }
+                                
+                                if (context == null) {
+                                    emitter.onError(new PayFailedException("you have not init the WxPay in your Application!"));
+                                    emitter.onComplete();
+                                    return;
+                                }
+
+                                final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
+                                // 将该app注册到微信
+                                msgApi.registerApp(payBean.getAppid());
+                                
                                 if (msgApi.getWXAppSupportAPI() < Build.PAY_SUPPORTED_SDK_INT) {
                                     emitter.onNext(new WxPayResult(-7));
                                     emitter.onComplete();

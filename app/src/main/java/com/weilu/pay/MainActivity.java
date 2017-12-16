@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.weilu.pay.annotation.WXPay;
-import com.weilu.pay.api.Ali.PayResult;
+import com.weilu.pay.api.ali.PayResult;
 import com.weilu.pay.api.RxAliPay;
 import com.weilu.pay.api.RxWxPay;
-import com.weilu.pay.api.Wx.WxPayResult;
+import com.weilu.pay.api.wx.WxPayResult;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

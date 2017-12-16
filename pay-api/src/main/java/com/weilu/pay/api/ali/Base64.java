@@ -1,4 +1,4 @@
-package com.weilu.pay.api.Ali;
+package com.weilu.pay.api.ali;
 
 public final class Base64 {
 

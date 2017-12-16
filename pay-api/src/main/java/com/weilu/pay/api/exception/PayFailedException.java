@@ -1,4 +1,4 @@
-package com.weilu.pay.api.Exception;
+package com.weilu.pay.api.exception;
 
 /**
  * Created by Vinctor on 2016/6/21.

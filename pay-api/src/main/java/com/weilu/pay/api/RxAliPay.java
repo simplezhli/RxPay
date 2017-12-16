@@ -3,7 +3,8 @@ package com.weilu.pay.api;
 import android.app.Activity;
 
 import com.alipay.sdk.app.PayTask;
-import com.weilu.pay.api.Ali.PayResult;
+import com.weilu.pay.api.ali.PayResult;
+import com.weilu.pay.api.exception.PayFailedException;
 import com.weilu.pay.api.utils.RxPayUtils;
 
 import java.util.Map;
@@ -46,17 +47,21 @@ public class RxAliPay {
     }
     
     public Observable<PayResult> requestPay() {
-        if (activity == null) {
-            throw new IllegalArgumentException("activity cannot be null");
-        }
-        if (paySign == null || "".equals(paySign)) {
-            throw new IllegalArgumentException("paySign cannot be null");
-        }
         return Observable
                 .create(new ObservableOnSubscribe<PayTask>() {
                     @Override
                     public void subscribe(ObservableEmitter<PayTask> emitter) throws Exception {
                         if (emitter.isDisposed()) {
+                            return;
+                        }
+                        if (activity == null) {
+                            emitter.onError(new PayFailedException("activity cannot be null"));
+                            emitter.onComplete();
+                            return;
+                        }
+                        if (activity == null | paySign == null || "".equals(paySign)) {
+                            emitter.onError(new PayFailedException("paySign cannot be null"));
+                            emitter.onComplete();
                             return;
                         }
                         emitter.onNext(new PayTask(activity));

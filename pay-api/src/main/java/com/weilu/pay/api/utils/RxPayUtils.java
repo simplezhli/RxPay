@@ -1,8 +1,8 @@
 package com.weilu.pay.api.utils;
 
-import com.weilu.pay.api.Ali.PayResult;
-import com.weilu.pay.api.Exception.PayFailedException;
-import com.weilu.pay.api.Wx.WxPayResult;
+import com.weilu.pay.api.ali.PayResult;
+import com.weilu.pay.api.exception.PayFailedException;
+import com.weilu.pay.api.wx.WxPayResult;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
