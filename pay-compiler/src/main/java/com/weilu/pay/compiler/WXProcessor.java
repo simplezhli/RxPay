@@ -90,7 +90,7 @@ public class WXProcessor extends BaseProcessor {
                 .returns(void.class)
                 .addParameter(bundleClazz, "savedInstanceState")
                 .addStatement("\tsuper.onCreate(savedInstanceState);\n" +
-                                "api = $T.createWXAPI(this, $T.getIntance().getAppid());\n" +
+                                "api = $T.createWXAPI(this, $T.getInstance().getAppid());\n" +
                                 "api.handleIntent(getIntent(), this)"
                         , wxApiFactoryClazz, rxWxPay)
                 .build();
@@ -157,7 +157,7 @@ public class WXProcessor extends BaseProcessor {
                 .addParameter(contextClazz, "context")
                 .addParameter(intentClazz, "intent")
                 .addStatement("$T msgApi = $T.createWXAPI(context, null);\n" +
-                                "msgApi.registerApp($T.getIntance().getAppid())"
+                                "msgApi.registerApp($T.getInstance().getAppid())"
                         , wxApiClazz, wxApiFactoryClazz, rxWxPay)
                 .build();
 

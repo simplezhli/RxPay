@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.0.7"
     }
 
     buildTypes {
@@ -31,5 +31,5 @@ dependencies {
     //微信sdk
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.3.5'
 
-    compile 'com.github.simplezhli.RxPay:pay-annotation:v1.0.2'
+    compile 'com.github.simplezhli.RxPay:pay-annotation:v1.0.6'
 }

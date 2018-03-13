@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
     
     public void aLiPay(View view){
-        RxAliPay.getIntance()
+        new RxAliPay()
                 .with(MainActivity.this, sign1)
                 .requestPay()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 "", "",
                 "");
 
-        RxWxPay.getIntance()
+        RxWxPay.getInstance()
                 .withWxPayBean(payBean)
                 .requestPay()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -80,5 +80,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete() {}
                 });
     }
-    
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxWxPay.getInstance().onDestroy();
+    }
 }

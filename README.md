@@ -19,16 +19,16 @@ RxPay的优点：
 添加依赖
 
 ```
-    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.6'){
+    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.7'){
         exclude module: 'appcompat-v7'
     }
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.6'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.7'
 ```
 
 ### 支付宝
 
-```java
-   RxAliPay.getIntance()
+```
+   new RxAliPay()
            .with(MainActivity.this, sign) //服务器端返回签名
            .requestPay()
            .observeOn(AndroidSchedulers.mainThread())
@@ -57,13 +57,13 @@ RxPay的优点：
 
 1.在你自定义的`Application`中初始化
 
-```java
+```
    RxWxPay.init(this);
 ```
 
 2.对你任意一个`activity`类进行如下注解：
 
-```java
+```
    @WXPay(BuildConfig.APPLICATION_ID)
    public class MainActivity extends AppCompatActivity {
    }
@@ -73,7 +73,7 @@ RxPay的优点：
 
 3.`AndroidManifest.xml`加入
 
-```xml
+```
     <activity
           android:name=".wxapi.WXPayEntryActivity"
           android:exported="true"
@@ -83,11 +83,11 @@ RxPay的优点：
 
 4.调用方法
 
-```java
+```
    RxWxPay.WXPayBean payBean = new RxWxPay.WXPayBean("appid", "partnerid", "noncestr",
            "timestamp", "prepayid", "sign");
    
-   RxWxPay.getIntance()
+   RxWxPay.getInstance()
           .withWxPayBean(payBean)
           .requestPay()
           .observeOn(AndroidSchedulers.mainThread())
@@ -109,6 +109,18 @@ RxPay的优点：
                        public void onComplete() {}
                  });
 
+```
+
+5.**注意**
+
+防止内存泄露，记得要取消订阅。
+
+```
+     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxWxPay.getInstance().onDestroy();
+    }
 ```
 
 ## License

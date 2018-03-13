@@ -25,7 +25,7 @@ public class BusUtil {
     public static BusUtil getDefault(){
         if (mBusUtil == null){
             synchronized (BusUtil.class){
-                if(mBusUtil == null){
+                if (mBusUtil == null){
                     mBusUtil = new BusUtil();
                 }
             }
@@ -48,7 +48,7 @@ public class BusUtil {
      * @param type
      * @return
      */
-    public <T>Flowable<T> toObserverable(Class<T> type){
+    public <T>Flowable<T> toObservable(Class<T> type){
         return mSubject.toFlowable(BackpressureStrategy.BUFFER)
                 .ofType(type);
     }
@@ -62,7 +62,7 @@ public class BusUtil {
      * @return
      */
     public <T> Disposable doSubscribe(Class<T> type, Consumer<T> next, Consumer<Throwable> error){
-        return toObserverable(type)
+        return toObservable(type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next, error);

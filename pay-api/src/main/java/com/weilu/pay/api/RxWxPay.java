@@ -21,6 +21,7 @@ import java.lang.reflect.Constructor;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -31,7 +32,7 @@ public class RxWxPay {
     
     private static RxWxPay singleton;
 
-    public static RxWxPay getIntance() {
+    public static RxWxPay getInstance() {
         if (singleton == null) {
             synchronized (RxAliPay.class) {
                 if (singleton == null) {
@@ -177,7 +178,7 @@ public class RxWxPay {
                                     emitter.onNext(new WxPayResult(-1));
                                     emitter.onComplete();
                                 } else {
-                                    BusUtil.getDefault()
+                                    Disposable disposable = BusUtil.getDefault()
                                             .doSubscribe(
                                                     BaseResp.class, new Consumer<BaseResp>() {
                                                         @Override
@@ -192,6 +193,7 @@ public class RxWxPay {
                                                             Log.e("NewsMainPresenter", throwable.toString());
                                                         }
                                                     });
+                                    BusUtil.getDefault().addSubscription(payBean, disposable);
                                 }
                             }
                         })
@@ -208,6 +210,11 @@ public class RxWxPay {
                 : isEmpty(sign) ? "sign" : "";
     }
 
+    public void onDestroy() {
+        if (payBean != null){
+            BusUtil.getDefault().unSubscribe(payBean);
+        }
+    }
 
     public static class WXPayBean {
 

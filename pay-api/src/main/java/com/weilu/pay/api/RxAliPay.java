@@ -19,21 +19,8 @@ import io.reactivex.functions.Function;
  */
 
 public class RxAliPay {
-    private static RxAliPay singleton;
     private Activity activity;
     private String paySign;
-
-    public static RxAliPay getIntance() {
-        if (singleton == null) {
-            synchronized (RxAliPay.class) {
-                if (singleton == null) {
-                    singleton = new RxAliPay();
-                    return singleton;
-                }
-            }
-        }
-        return singleton;
-    }
 
     public RxAliPay with(Activity activity, String paySign) {
         this.activity = activity;
