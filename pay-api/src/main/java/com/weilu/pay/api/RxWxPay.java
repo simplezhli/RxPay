@@ -13,10 +13,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.weilu.pay.api.exception.PayFailedException;
 import com.weilu.pay.api.utils.BusUtil;
+import com.weilu.pay.api.utils.ErrCode;
 import com.weilu.pay.api.utils.RxPayUtils;
 import com.weilu.pay.api.wx.WxPayResult;
-
-import java.lang.reflect.Constructor;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -46,20 +45,20 @@ public class RxWxPay {
 
     private static Application context;
     private static String packageName = "";
-
+    private static BroadcastReceiver receiver;
+    
     public static void init(Application application) {
         context = application;
         packageName = context.getPackageName();
 
-        //receive
-        try {
-            Class c = Class.forName(packageName + ".AppRegister");
-            Constructor c0 = c.getDeclaredConstructor();
-            BroadcastReceiver receiver = (BroadcastReceiver) c0.newInstance();
-            context.registerReceiver(receiver,
-                    new IntentFilter("com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (receiver == null){
+            try {
+                Class c = Class.forName(packageName + ".AppRegister");
+                receiver = (BroadcastReceiver) c.getDeclaredConstructor().newInstance();
+                context.registerReceiver(receiver, new IntentFilter("com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -145,13 +144,13 @@ public class RxWxPay {
                                 String checkResult = checkisEmpty();
                                 
                                 if (!isEmpty(checkResult)) {
-                                    emitter.onError(new PayFailedException(checkResult + " cannot be null"));
+                                    emitter.onError(new PayFailedException(String.valueOf(ErrCode.PARAMETER_IS_NULL), checkResult + " cannot be null"));
                                     emitter.onComplete();
                                     return;
                                 }
                                 
                                 if (context == null) {
-                                    emitter.onError(new PayFailedException("you have not init the WxPay in your Application!"));
+                                    emitter.onError(new PayFailedException(String.valueOf(ErrCode.NOT_INIT), "you have not init the WxPay in your Application!"));
                                     emitter.onComplete();
                                     return;
                                 }
@@ -161,7 +160,7 @@ public class RxWxPay {
                                 msgApi.registerApp(payBean.getAppid());
                                 
                                 if (msgApi.getWXAppSupportAPI() < Build.PAY_SUPPORTED_SDK_INT) {
-                                    emitter.onNext(new WxPayResult(-7));
+                                    emitter.onNext(new WxPayResult(ErrCode.NOT_INSTALLED_WECHAT));
                                     emitter.onComplete();
                                     return;
                                 }

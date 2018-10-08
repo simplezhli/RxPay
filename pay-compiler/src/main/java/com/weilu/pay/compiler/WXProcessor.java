@@ -73,7 +73,7 @@ public class WXProcessor extends BaseProcessor {
         ClassName wxApiClazz = ClassName.get("com.tencent.mm.opensdk.openapi", "IWXAPI");
         ClassName rxWxPay = ClassName.get("com.weilu.pay.api", "RxWxPay");
         ClassName busClazz = ClassName.get("com.weilu.pay.api.utils", "BusUtil");
-
+        ClassName constantsClazz = ClassName.get("com.tencent.mm.opensdk.constants", "ConstantsAPI");
 
         MethodSpec onReq = MethodSpec
                 .methodBuilder("onReq")
@@ -102,7 +102,7 @@ public class WXProcessor extends BaseProcessor {
                 .returns(void.class)
                 .addParameter(onNewIntentClazz, "intent")
                 .addStatement("\tsuper.onNewIntent(intent);\n" +
-                        " setIntent(intent);\n" +
+                        "setIntent(intent);\n" +
                         "api.handleIntent(intent, this)")
                 .build();
 
@@ -112,10 +112,10 @@ public class WXProcessor extends BaseProcessor {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
                 .addParameter(baseRespClazz, "baseResp")
-                .addStatement("\t$T.getDefault().post(baseResp);\n" +
-                        "finish()", busClazz)
+                .addStatement("\tif (baseResp.getType() == $T.COMMAND_PAY_BY_WX) {\n" +
+                        "\t$T.getDefault().post(baseResp);\n" +
+                        "\tfinish();\n}", constantsClazz, busClazz)
                 .build();
-
 
         TypeSpec typeSpec = TypeSpec
                 .classBuilder(customeClassName)
@@ -156,7 +156,7 @@ public class WXProcessor extends BaseProcessor {
                 .returns(void.class)
                 .addParameter(contextClazz, "context")
                 .addParameter(intentClazz, "intent")
-                .addStatement("$T msgApi = $T.createWXAPI(context, null);\n" +
+                .addStatement("\t$T msgApi = $T.createWXAPI(context, null);\n" +
                                 "msgApi.registerApp($T.getInstance().getAppid())"
                         , wxApiClazz, wxApiFactoryClazz, rxWxPay)
                 .build();

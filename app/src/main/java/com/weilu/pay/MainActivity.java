@@ -2,17 +2,18 @@ package com.weilu.pay;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.weilu.pay.annotation.WXPay;
-import com.weilu.pay.api.ali.PayResult;
 import com.weilu.pay.api.RxAliPay;
 import com.weilu.pay.api.RxWxPay;
+import com.weilu.pay.api.ali.PayResult;
+import com.weilu.pay.api.exception.PayFailedException;
 import com.weilu.pay.api.wx.WxPayResult;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 @WXPay(BuildConfig.APPLICATION_ID)
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         new RxAliPay()
                 .with(MainActivity.this, sign1)
                 .requestPay()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<PayResult>() {
                     @Override
                     public void onSubscribe(Disposable d) {}
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e("ErrCode:", ((PayFailedException)e).getErrCode());
                         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         RxWxPay.getInstance()
                 .withWxPayBean(payBean)
                 .requestPay()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WxPayResult>() {
                     @Override
                     public void onSubscribe(Disposable d) {}
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e("ErrCode:", ((PayFailedException)e).getErrCode());
                         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 

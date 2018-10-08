@@ -7,6 +7,7 @@ import com.weilu.pay.api.wx.WxPayResult;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -24,7 +25,7 @@ public class RxPayUtils {
                     @Override
                     public PayResult apply(PayResult payResult) throws Exception {
                         if (!payResult.isSucceed()) {
-                            throw new PayFailedException(payResult.getErrInfo());
+                            throw new PayFailedException(payResult.getResultStatus(), payResult.getErrInfo());
                         }
                         return payResult;
                     }
@@ -41,7 +42,7 @@ public class RxPayUtils {
                     @Override
                     public WxPayResult apply(WxPayResult wxPayResult) {
                         if (!wxPayResult.isSucceed()) {
-                            throw new PayFailedException(wxPayResult.getErrInfo());
+                            throw new PayFailedException(String.valueOf(wxPayResult.getErrCode()), wxPayResult.getErrInfo());
                         }
                         return wxPayResult;
                     }
@@ -56,7 +57,8 @@ public class RxPayUtils {
                     public ObservableSource<T> apply(Observable<T> observable) {
                         return observable
                                 .subscribeOn(Schedulers.io())
-                                .unsubscribeOn(Schedulers.io());
+                                .unsubscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread());
                     }
                 };
     }

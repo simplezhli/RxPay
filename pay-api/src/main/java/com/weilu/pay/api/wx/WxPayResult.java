@@ -1,5 +1,7 @@
 package com.weilu.pay.api.wx;
 
+import com.weilu.pay.api.utils.ErrCode;
+
 /**
  * Created by weilu on 2017/12/14.
  */
@@ -14,7 +16,7 @@ public class WxPayResult {
     /**
      * 获取微信支付结果状态码
      *
-     * @return 0成功  -1错误  -2取消  -7未安装微信
+     * @return 0成功  -1错误  -2取消  -900未安装微信
      */
     public int getErrCode() {
         return errCode;
@@ -39,7 +41,7 @@ public class WxPayResult {
             case -4:
                 result = "拒绝支付";
                 break;
-            case -7:
+            case ErrCode.NOT_INSTALLED_WECHAT:
                 result = "您未安装最新版本微信，不支持微信支付，请安装或升级微信版本";
                 break;
             default:

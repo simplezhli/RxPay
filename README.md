@@ -19,10 +19,10 @@ RxPay的优点：
 添加依赖
 
 ```
-    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.7'){
+    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.8'){
         exclude module: 'appcompat-v7'
     }
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.7'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.8'
 ```
 
 ### 支付宝
@@ -31,7 +31,6 @@ RxPay的优点：
    new RxAliPay()
            .with(MainActivity.this, sign) //服务器端返回签名
            .requestPay()
-           .observeOn(AndroidSchedulers.mainThread())
            .subscribe(new Observer<PayResult>() {
                  @Override
                  public void onSubscribe(Disposable d) {}
@@ -43,6 +42,7 @@ RxPay的优点：
    
                  @Override
                  public void onError(Throwable e) {
+                       Log.e("ErrCode:", ((PayFailedException)e).getErrCode());
                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                  }
    
@@ -90,7 +90,6 @@ RxPay的优点：
    RxWxPay.getInstance()
           .withWxPayBean(payBean)
           .requestPay()
-          .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Observer<WxPayResult>() {
                  @Override
                  public void onSubscribe(Disposable d) {}
@@ -102,6 +101,7 @@ RxPay的优点：
    
                  @Override
                  public void onError(Throwable e) {
+                        Log.e("ErrCode:", ((PayFailedException)e).getErrCode());
                         Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                  }
    
