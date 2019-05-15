@@ -19,10 +19,10 @@ RxPay的优点：
 添加依赖
 
 ```xml
-    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.8'){
+    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.9'){
         exclude module: 'appcompat-v7'
     }
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.8'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.9'
 ```
 
 ### 支付宝
@@ -65,8 +65,7 @@ RxPay的优点：
 
 ```java
    @WXPay(BuildConfig.APPLICATION_ID)
-   public class MainActivity extends AppCompatActivity {
-   }
+   public class MainActivity extends AppCompatActivity {}
 ```
 
 之后Make Project
@@ -80,6 +79,8 @@ RxPay的优点：
           android:launchMode="singleTop"
           android:screenOrientation="portrait" />
 ```
+
+适配8.0注意透明主题的设置：[Android 8.0适配指北](https://weilu.blog.csdn.net/article/details/80965631#t5)
 
 4.调用方法
 
@@ -116,7 +117,7 @@ RxPay的优点：
 防止内存泄露，记得要取消订阅。
 
 ```java
-     @Override
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         RxWxPay.getInstance().onDestroy();
