@@ -19,9 +19,7 @@ RxPay的优点：
 添加依赖
 
 ```xml
-    compile ('com.github.simplezhli.RxPay:pay-api:v1.0.9'){
-        exclude module: 'appcompat-v7'
-    }
+    implementation 'com.github.simplezhli.RxPay:pay-api:v1.0.9'
     annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.9'
 ```
 
@@ -76,8 +74,8 @@ RxPay的优点：
     <activity
           android:name=".wxapi.WXPayEntryActivity"
           android:exported="true"
-          android:launchMode="singleTop"
-          android:screenOrientation="portrait" />
+          android:theme="@android:style/Theme.Translucent.NoTitleBar"
+          android:launchMode="singleTop" />
 ```
 
 适配8.0注意透明主题的设置：[Android 8.0适配指北](https://weilu.blog.csdn.net/article/details/80965631#t5)

@@ -3,7 +3,6 @@ package com.weilu.pay.api;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.tencent.mm.opensdk.constants.Build;
@@ -262,7 +261,7 @@ public class RxWxPay {
         }
     }
 
-    private boolean isEmpty(@Nullable CharSequence str) {
+    private boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
 }

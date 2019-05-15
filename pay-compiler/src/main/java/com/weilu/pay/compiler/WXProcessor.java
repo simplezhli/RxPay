@@ -28,9 +28,6 @@ import javax.lang.model.element.TypeElement;
 @AutoService(Processor.class)
 public class WXProcessor extends BaseProcessor {
 
-    private final String packageNameTag = "wxapi";
-    private final String customeClassName = "WXPayEntryActivity";
-    
     /**
      * 指定注解处理器是注册给那一个注解的
      * @return
@@ -51,7 +48,7 @@ public class WXProcessor extends BaseProcessor {
         Map<String, ClassEntity> map = entityHandler.handlerElement(roundEnvironment, this);
         for (Map.Entry<String, ClassEntity> item : map.entrySet()) {
             entityHandler.generateCode(brewWxEntityActivity(item));
-            entityHandler.generateCode(brewWxResgister(item));
+            entityHandler.generateCode(brewWxRegister(item));
             break;
         }
         return true;
@@ -60,8 +57,7 @@ public class WXProcessor extends BaseProcessor {
     private JavaFile brewWxEntityActivity(Map.Entry<String, ClassEntity> item) {
         ClassEntity classEntity = item.getValue();
 
-        String packageName = classEntity.getElement().getAnnotation(WXPay.class).value()
-                + "." + packageNameTag;
+        String packageName = classEntity.getElement().getAnnotation(WXPay.class).value() + ".wxapi";
 
         ClassName activityClazz = ClassName.get("android.app", "Activity");
         ClassName interfaceClazz = ClassName.get("com.tencent.mm.opensdk.openapi", "IWXAPIEventHandler");
@@ -89,10 +85,9 @@ public class WXProcessor extends BaseProcessor {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
                 .addParameter(bundleClazz, "savedInstanceState")
-                .addStatement("\tsuper.onCreate(savedInstanceState);\n" +
-                                "api = $T.createWXAPI(this, $T.getInstance().getAppId());\n" +
-                                "api.handleIntent(getIntent(), this)"
-                        , wxApiFactoryClazz, rxWxPay)
+                .addStatement("super.onCreate(savedInstanceState)")
+                .addStatement("api = $T.createWXAPI(this, $T.getInstance().getAppId())", wxApiFactoryClazz, rxWxPay)
+                .addStatement("api.handleIntent(getIntent(), this)")
                 .build();
 
         MethodSpec onNewIntent = MethodSpec
@@ -101,9 +96,9 @@ public class WXProcessor extends BaseProcessor {
                 .addModifiers(Modifier.PROTECTED)
                 .returns(void.class)
                 .addParameter(onNewIntentClazz, "intent")
-                .addStatement("\tsuper.onNewIntent(intent);\n" +
-                        "setIntent(intent);\n" +
-                        "api.handleIntent(intent, this)")
+                .addStatement("super.onNewIntent(intent)")
+                .addStatement("setIntent(intent)")
+                .addStatement("api.handleIntent(intent, this)")
                 .build();
 
         MethodSpec onResp = MethodSpec
@@ -112,13 +107,14 @@ public class WXProcessor extends BaseProcessor {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class)
                 .addParameter(baseRespClazz, "baseResp")
-                .addStatement("\tif (baseResp.getType() == $T.COMMAND_PAY_BY_WX) {\n" +
-                        "\t$T.getDefault().post(baseResp);\n" +
-                        "\tfinish();\n}", constantsClazz, busClazz)
+                .beginControlFlow("if (baseResp.getType() == $T.COMMAND_PAY_BY_WX)", constantsClazz)
+                .addStatement("$T.getDefault().post(baseResp)", busClazz)
+                .addStatement("finish()")
+                .endControlFlow()
                 .build();
 
         TypeSpec typeSpec = TypeSpec
-                .classBuilder(customeClassName)
+                .classBuilder("WXPayEntryActivity")
                 .addModifiers(Modifier.PUBLIC)
                 .superclass(activityClazz)
                 .addSuperinterface(interfaceClazz)
@@ -129,20 +125,16 @@ public class WXProcessor extends BaseProcessor {
                 .addMethod(onResp)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
-                .build();
-
-        return javaFile;
+        return JavaFile.builder(packageName, typeSpec).build();
     }
 
-    private JavaFile brewWxResgister(Map.Entry<String, ClassEntity> item) {
+    private JavaFile brewWxRegister(Map.Entry<String, ClassEntity> item) {
         ClassEntity classEntity = item.getValue();
 
         String packageName = classEntity.getElement().getAnnotation(WXPay.class).value();
 
         ClassName receiveClazz = ClassName.get("android.content", "BroadcastReceiver");
         ClassName contextClazz = ClassName.get("android.content", "Context");
-        ClassName bundleClazz = ClassName.get("android.os", "Bundle");
         ClassName wxApiFactoryClazz = ClassName.get("com.tencent.mm.opensdk.openapi", "WXAPIFactory");
         ClassName wxApiClazz = ClassName.get("com.tencent.mm.opensdk.openapi", "IWXAPI");
         ClassName rxWxPay = ClassName.get("com.weilu.pay.api", "RxWxPay");
@@ -156,9 +148,8 @@ public class WXProcessor extends BaseProcessor {
                 .returns(void.class)
                 .addParameter(contextClazz, "context")
                 .addParameter(intentClazz, "intent")
-                .addStatement("\t$T msgApi = $T.createWXAPI(context, null);\n" +
-                                "msgApi.registerApp($T.getInstance().getAppId())"
-                        , wxApiClazz, wxApiFactoryClazz, rxWxPay)
+                .addStatement("$T msgApi = $T.createWXAPI(context, null)", wxApiClazz, wxApiFactoryClazz)
+                .addStatement("msgApi.registerApp($T.getInstance().getAppId())", rxWxPay)
                 .build();
 
 
@@ -169,9 +160,6 @@ public class WXProcessor extends BaseProcessor {
                 .addMethod(onReceive)
                 .build();
 
-        JavaFile javaFile = JavaFile.builder(packageName, typeSpec)
-                .build();
-
-        return javaFile;
+        return JavaFile.builder(packageName, typeSpec).build();
     }
 }

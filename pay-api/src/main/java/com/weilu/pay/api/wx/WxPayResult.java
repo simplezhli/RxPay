@@ -7,7 +7,7 @@ import com.weilu.pay.api.utils.ErrCode;
  */
 
 public class WxPayResult {
-    int errCode;
+    private int errCode;
 
     public WxPayResult(int errCode) {
         this.errCode = errCode;
@@ -20,10 +20,6 @@ public class WxPayResult {
      */
     public int getErrCode() {
         return errCode;
-    }
-
-    public void setErrCode(int errCood) {
-        this.errCode = errCode;
     }
 
     public String getErrInfo() {

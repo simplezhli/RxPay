@@ -87,8 +87,9 @@ public class BusUtil {
             mSubscriptionMap = new HashMap<>();
         }
         String key = o.getClass().getName();
-        if (mSubscriptionMap.get(key) != null) {
-            mSubscriptionMap.get(key).add(disposable);
+        CompositeDisposable compositeDisposable = mSubscriptionMap.get(key);
+        if (compositeDisposable != null) {
+            compositeDisposable.add(disposable);
         } else {
             //一次性容器,可以持有多个并提供 添加和移除。
             CompositeDisposable disposables = new CompositeDisposable();
@@ -110,8 +111,10 @@ public class BusUtil {
         if (!mSubscriptionMap.containsKey(key)){
             return;
         }
-        if (mSubscriptionMap.get(key) != null) {
-            mSubscriptionMap.get(key).dispose();
+        
+        CompositeDisposable compositeDisposable = mSubscriptionMap.get(key);
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
         }
 
         mSubscriptionMap.remove(key);
