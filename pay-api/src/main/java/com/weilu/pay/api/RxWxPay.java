@@ -24,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
- * Created by weilu on 2017/12/14.
+ * @author Created by weilu on 2017/12/14.
  */
 
 public class RxWxPay {
@@ -62,13 +62,13 @@ public class RxWxPay {
         }
     }
 
-    private String partnerid;
+    private String partnerId;
 
     private String noncestr;
 
     private String timestamp;
 
-    private String prepayid;
+    private String prepayId;
 
     private String sign;
 
@@ -76,13 +76,13 @@ public class RxWxPay {
 
     private WXPayBean payBean;
 
-    public RxWxPay withAppID(String Appid) {
-        this.appID = Appid;
+    public RxWxPay withAppID(String appId) {
+        this.appID = appId;
         return this;
     }
 
-    public RxWxPay withPartnerID(String partnerid) {
-        this.partnerid = partnerid;
+    public RxWxPay withPartnerID(String partnerId) {
+        this.partnerId = partnerId;
         return this;
     }
 
@@ -96,8 +96,8 @@ public class RxWxPay {
         return this;
     }
 
-    public RxWxPay withPrepayID(String prepayid) {
-        this.prepayid = prepayid;
+    public RxWxPay withPrepayID(String prepayId) {
+        this.prepayId = prepayId;
         return this;
     }
 
@@ -106,42 +106,40 @@ public class RxWxPay {
         return this;
     }
 
-    public String getAppid() {
+    public String getAppId() {
         return appID;
     }
 
     public RxWxPay withWxPayBean(WXPayBean payBean) {
         this.payBean = payBean;
-        appID = payBean.appid;
-        partnerid = payBean.partnerid;
+        appID = payBean.appId;
+        partnerId = payBean.partnerId;
         noncestr = payBean.noncestr;
         timestamp = payBean.timestamp;
-        prepayid = payBean.prepayid;
+        prepayId = payBean.prepayId;
         sign = payBean.sign;
         return this;
     }
 
     public Observable<WxPayResult> requestPay() {
         if (payBean == null) {
-            payBean = new WXPayBean(appID, partnerid, noncestr, timestamp, prepayid, sign);
-            appID = payBean.appid;
-            partnerid = payBean.partnerid;
+            payBean = new WXPayBean(appID, partnerId, noncestr, timestamp, prepayId, sign);
+            appID = payBean.appId;
+            partnerId = payBean.partnerId;
             noncestr = payBean.noncestr;
             timestamp = payBean.timestamp;
-            prepayid = payBean.prepayid;
+            prepayId = payBean.prepayId;
             sign = payBean.sign;
         }
        
-        return
-                Observable
-                        .create(new ObservableOnSubscribe<WxPayResult>() {
+        return Observable.create(new ObservableOnSubscribe<WxPayResult>() {
                             @Override
-                            public void subscribe(final ObservableEmitter<WxPayResult> emitter) throws Exception {
+                            public void subscribe(final ObservableEmitter<WxPayResult> emitter) {
                                 if (emitter.isDisposed()) {
                                     return;
                                 }
 
-                                String checkResult = checkisEmpty();
+                                String checkResult = checkIsEmpty();
                                 
                                 if (!isEmpty(checkResult)) {
                                     emitter.onError(new PayFailedException(String.valueOf(ErrCode.PARAMETER_IS_NULL), checkResult + " cannot be null"));
@@ -157,7 +155,7 @@ public class RxWxPay {
 
                                 final IWXAPI msgApi = WXAPIFactory.createWXAPI(context, null);
                                 // 将该app注册到微信
-                                msgApi.registerApp(payBean.getAppid());
+                                msgApi.registerApp(payBean.getAppId());
                                 
                                 if (msgApi.getWXAppSupportAPI() < Build.PAY_SUPPORTED_SDK_INT) {
                                     emitter.onNext(new WxPayResult(ErrCode.NOT_INSTALLED_WECHAT));
@@ -165,9 +163,9 @@ public class RxWxPay {
                                     return;
                                 }
                                 PayReq request = new PayReq();
-                                request.appId = payBean.appid;
-                                request.partnerId = payBean.partnerid;
-                                request.prepayId = payBean.prepayid;
+                                request.appId = payBean.appId;
+                                request.partnerId = payBean.partnerId;
+                                request.prepayId = payBean.prepayId;
                                 request.packageValue = "Sign=WXPay";
                                 request.nonceStr = payBean.noncestr;
                                 request.timeStamp = payBean.timestamp;
@@ -181,14 +179,14 @@ public class RxWxPay {
                                             .doSubscribe(
                                                     BaseResp.class, new Consumer<BaseResp>() {
                                                         @Override
-                                                        public void accept(BaseResp baseResp) throws Exception {
+                                                        public void accept(BaseResp baseResp) {
                                                             emitter.onNext(new WxPayResult(baseResp.errCode));
                                                             emitter.onComplete();
                                                         }
                                                     },
                                                     new Consumer<Throwable>() {
                                                         @Override
-                                                        public void accept(Throwable throwable) throws Exception {
+                                                        public void accept(Throwable throwable) {
                                                             Log.e("NewsMainPresenter", throwable.toString());
                                                         }
                                                     });
@@ -196,54 +194,55 @@ public class RxWxPay {
                                 }
                             }
                         })
-                        .compose(RxPayUtils.<WxPayResult> checkWechatResult())
+                        .compose(RxPayUtils.checkWechatResult())
                         .compose(RxPayUtils.<WxPayResult> applySchedulers());
     }
 
-    private String checkisEmpty() {
-        return isEmpty(appID) ? "appid"
-                : isEmpty(partnerid) ? "partnerid"
+    private String checkIsEmpty() {
+        return isEmpty(appID) ? "appId"
+                : isEmpty(partnerId) ? "partnerId"
                 : isEmpty(noncestr) ? "noncestr"
                 : isEmpty(timestamp) ? "timestamp"
-                : isEmpty(prepayid) ? "prepayid"
+                : isEmpty(prepayId) ? "prepayId"
                 : isEmpty(sign) ? "sign" : "";
     }
 
     public void onDestroy() {
         if (payBean != null){
             BusUtil.getDefault().unSubscribe(payBean);
+            payBean = null;
         }
     }
 
     public static class WXPayBean {
 
-        private String appid;
+        private String appId;
 
-        private String partnerid;
+        private String partnerId;
 
         private String noncestr;
 
         private String timestamp;
 
-        private String prepayid;
+        private String prepayId;
 
         private String sign;
 
-        public WXPayBean(String appid, String partnerid, String noncestr, String timestamp, String prepayid, String sign) {
-            this.appid = appid;
-            this.partnerid = partnerid;
+        public WXPayBean(String appId, String partnerId, String noncestr, String timestamp, String prepayId, String sign) {
+            this.appId = appId;
+            this.partnerId = partnerId;
             this.noncestr = noncestr;
             this.timestamp = timestamp;
-            this.prepayid = prepayid;
+            this.prepayId = prepayId;
             this.sign = sign;
         }
 
-        public String getAppid() {
-            return appid;
+        public String getAppId() {
+            return appId;
         }
 
-        public String getPartnerid() {
-            return partnerid;
+        public String getPartnerId() {
+            return partnerId;
         }
 
         public String getNoncestr() {
@@ -254,8 +253,8 @@ public class RxWxPay {
             return timestamp;
         }
 
-        public String getPrepayid() {
-            return prepayid;
+        public String getPrepayId() {
+            return prepayId;
         }
 
         public String getSign() {
@@ -263,11 +262,7 @@ public class RxWxPay {
         }
     }
 
-    public static boolean isEmpty(@Nullable CharSequence str) {
-        if (str == null || str.length() == 0){
-            return true;
-        }else{
-            return false;
-        }
+    private boolean isEmpty(@Nullable CharSequence str) {
+        return str == null || str.length() == 0;
     }
 }

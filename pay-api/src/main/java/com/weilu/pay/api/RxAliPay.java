@@ -16,7 +16,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Function;
 
 /**
- * Created by weilu on 2017/12/14.
+ * @author Created by weilu on 2017/12/14.
  */
 
 public class RxAliPay {
@@ -42,7 +42,7 @@ public class RxAliPay {
         return Observable
                 .create(new ObservableOnSubscribe<PayTask>() {
                     @Override
-                    public void subscribe(ObservableEmitter<PayTask> emitter) throws Exception {
+                    public void subscribe(ObservableEmitter<PayTask> emitter) {
                         if (emitter.isDisposed()) {
                             return;
                         }
@@ -64,11 +64,10 @@ public class RxAliPay {
                     @Override
                     public PayResult apply(PayTask payTask) {
                         Map<String, String> result = payTask.payV2(paySign, true);
-                        PayResult payResult = new PayResult(result);
-                        return payResult;
+                        return new PayResult(result);
                     }
                 })
-                .compose(RxPayUtils.<PayResult> checkAliPayResult())
+                .compose(RxPayUtils.checkAliPayResult())
                 .compose(RxPayUtils.<PayResult> applySchedulers());
     }
 
