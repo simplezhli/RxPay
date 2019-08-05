@@ -43,16 +43,14 @@ public class RxWxPay {
     }
 
     private static Application context;
-    private static String packageName = "";
     private static BroadcastReceiver receiver;
     
     public static void init(Application application) {
         context = application;
-        packageName = context.getPackageName();
 
         if (receiver == null){
             try {
-                Class c = Class.forName(packageName + ".AppRegister");
+                Class c = Class.forName(context.getPackageName() + ".AppRegister");
                 receiver = (BroadcastReceiver) c.getDeclaredConstructor().newInstance();
                 context.registerReceiver(receiver, new IntentFilter("com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP"));
             } catch (Exception e) {

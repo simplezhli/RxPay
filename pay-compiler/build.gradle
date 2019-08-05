@@ -6,7 +6,7 @@ group='com.weilu.pay.complier'
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api 'com.squareup:javapoet:1.11.1'
-    api 'com.google.auto.service:auto-service:1.0-rc4'
+    api 'com.google.auto.service:auto-service:1.0-rc6'
     api project(':pay-annotation')
 }
 

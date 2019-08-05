@@ -53,7 +53,7 @@ RxPay的优点：
 
 ### 微信
 
-1.在你自定义的`Application`中初始化
+1.在你自定义的`Application`或者`Activity`的`onCreate`中初始化。
 
 ```java
    RxWxPay.init(this);
@@ -62,7 +62,7 @@ RxPay的优点：
 2.对你任意一个`activity`类进行如下注解：
 
 ```java
-   @WXPay(BuildConfig.APPLICATION_ID)
+   @WXPay("微信支付注册时的包名")
    public class MainActivity extends AppCompatActivity {}
 ```
 
