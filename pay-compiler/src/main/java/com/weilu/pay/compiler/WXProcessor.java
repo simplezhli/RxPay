@@ -47,7 +47,7 @@ public class WXProcessor extends BaseProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Map<String, ClassEntity> map = entityHandler.handlerElement(roundEnvironment, this);
         for (Map.Entry<String, ClassEntity> item : map.entrySet()) {
-            entityHandler.generateCode(brewWxEntityActivity(item));
+            //entityHandler.generateCode(brewWxEntityActivity(item));
             entityHandler.generateCode(brewWxRegister(item));
             break;
         }

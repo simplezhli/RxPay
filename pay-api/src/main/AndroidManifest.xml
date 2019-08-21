@@ -21,6 +21,19 @@
             android:exported="false"
             android:screenOrientation="behind"/>
 
+        <activity
+            android:name="com.weilu.pay.api.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop" />
+
+        <activity-alias
+            android:name="${applicationId}.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:targetActivity="com.weilu.pay.api.wxapi.WXPayEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        
     </application>
 
 </manifest>
