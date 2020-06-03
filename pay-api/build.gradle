@@ -22,11 +22,11 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     //RxJava
-    api 'io.reactivex.rxjava2:rxjava:2.2.2'
+    api 'io.reactivex.rxjava2:rxjava:2.2.19'
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     //微信sdk
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
 

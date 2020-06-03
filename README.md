@@ -19,9 +19,11 @@ RxPay的优点：
 添加依赖
 
 ```xml
-    implementation 'com.github.simplezhli.RxPay:pay-api:v1.0.9'
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:v1.0.9'
+    implementation 'com.github.simplezhli.RxPay:pay-api:1.1.0'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.1.0'
 ```
+
+支付宝需自行添加jar或aar，可参考demo。
 
 ### 支付宝
 
@@ -68,19 +70,7 @@ RxPay的优点：
 
 之后Make Project
 
-3.`AndroidManifest.xml`加入
-
-```xml
-    <activity
-          android:name=".wxapi.WXPayEntryActivity"
-          android:exported="true"
-          android:theme="@android:style/Theme.Translucent.NoTitleBar"
-          android:launchMode="singleTop" />
-```
-
-适配8.0注意透明主题的设置：[Android 8.0适配指北](https://weilu.blog.csdn.net/article/details/80965631#t5)
-
-4.调用方法
+3.调用方法
 
 ```java
    RxWxPay.WXPayBean payBean = new RxWxPay.WXPayBean("appid", "partnerid", "noncestr",
@@ -110,7 +100,7 @@ RxPay的优点：
 
 ```
 
-5.**注意**
+4.**注意**
 
 防止内存泄露，记得要取消订阅。
 
