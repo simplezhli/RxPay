@@ -28,8 +28,7 @@ dependencies {
     //RxAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     //微信sdk
-    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
-
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
     api project(':pay-annotation')
 }
 
