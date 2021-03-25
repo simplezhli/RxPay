@@ -4,9 +4,11 @@
 
 基于 [Vinctor/RxPay](https://github.com/Vinctor/RxPay) 修改实现，感谢原作者。有如下不同：
 
-- 支持RxJava2。
+- 支持RxJava3。（RxJava2为1.1.0版本）
 
 - 对支付结果的二次封装。
+
+- 适配Android 11（1.2.0版本）
 
 RxPay的优点：
 
@@ -19,8 +21,8 @@ RxPay的优点：
 添加依赖
 
 ```xml
-    implementation 'com.github.simplezhli.RxPay:pay-api:1.1.0'
-    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.1.0'
+    implementation 'com.github.simplezhli.RxPay:pay-api:1.2.0'
+    annotationProcessor 'com.github.simplezhli.RxPay:pay-compiler:1.2.0'
 ```
 
 支付宝需自行添加jar或aar，可参考demo。

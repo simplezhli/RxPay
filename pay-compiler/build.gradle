@@ -5,13 +5,15 @@ group='com.weilu.pay.complier'
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.squareup:javapoet:1.12.1'
-    api 'com.google.auto.service:auto-service:1.0-rc7'
+    implementation 'com.squareup:javapoet:1.13.0'
+    // https://github.com/google/auto/tree/master/service
+    implementation 'com.google.auto.service:auto-service:1.0-rc7'
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
     api project(':pay-annotation')
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
 
 //指定编译的编码
 tasks.withType(JavaCompile){

@@ -4,13 +4,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.weilu.pay.api'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 10
-        versionName "1.1.0"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 12
+        versionName "1.2.0"
     }
 
     buildTypes {
@@ -19,23 +19,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     //RxJava
-    api 'io.reactivex.rxjava2:rxjava:2.2.19'
+    api 'io.reactivex.rxjava3:rxjava:3.0.11'
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
     //微信sdk
-    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.22'
     api project(':pay-annotation')
 }
 
 // 打包源码
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    getArchiveClassifier().set('sources')
 }
 
 task javadoc(type: Javadoc) {
@@ -47,7 +52,7 @@ task javadoc(type: Javadoc) {
 
 // 制作文档(Javadoc)
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    getArchiveClassifier().set('javadoc')
     from javadoc.destinationDir
 }
 

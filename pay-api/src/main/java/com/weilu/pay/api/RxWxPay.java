@@ -16,11 +16,12 @@ import com.weilu.pay.api.utils.ErrCode;
 import com.weilu.pay.api.utils.RxPayUtils;
 import com.weilu.pay.api.wx.WxPayResult;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+
 
 /**
  * @author Created by weilu on 2017/12/14.

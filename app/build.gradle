@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     
     defaultConfig {
         applicationId "com.weilu.pay"
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 10
-        versionName "1.1.0"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 12
+        versionName "1.2.0"
     }
     
     buildTypes {
@@ -17,14 +17,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     testImplementation 'junit:junit:4.12'
     // 支付宝 SDK AAR 包所需的配置
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation (name: 'alipaysdk-15.8.02.210308182128', ext: 'aar')
     implementation project(':pay-api')
     annotationProcessor project(':pay-compiler')
 }

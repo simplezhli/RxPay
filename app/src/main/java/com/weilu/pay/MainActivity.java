@@ -13,8 +13,9 @@ import com.weilu.pay.api.exception.PayFailedException;
 import com.weilu.pay.api.wx.WxPayResult;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 @WXPay(BuildConfig.APPLICATION_ID)
 public class MainActivity extends AppCompatActivity {
