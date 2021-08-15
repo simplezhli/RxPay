@@ -25,11 +25,9 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     testImplementation 'junit:junit:4.12'
-    // 支付宝 SDK AAR 包所需的配置
-    implementation (name: 'alipaysdk-15.8.02.210308182128', ext: 'aar')
     implementation project(':pay-api')
     annotationProcessor project(':pay-compiler')
 }
